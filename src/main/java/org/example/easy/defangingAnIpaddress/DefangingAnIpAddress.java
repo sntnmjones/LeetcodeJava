@@ -2,6 +2,7 @@ package org.example.easy.defangingAnIpaddress;
 
 import org.example.testrunner.Test;
 import org.example.testrunner.TestRunner;
+import org.example.testrunner.TestRunnerUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,11 +27,7 @@ public class DefangingAnIpAddress {
         );
 
         List<String> testMethodNames = Arrays.asList("bruteForce", "manual");
-        int testMethodsSize = testMethodNames.size();
-        Method[] testMethods = new Method[testMethodsSize];
-        for (int i = 0; i < testMethodsSize; i++) {
-            testMethods[i] = DefangingAnIpAddress.class.getDeclaredMethod(testMethodNames.get(i), String.class);
-        }
+        Method[] testMethods = TestRunnerUtil.getTestMethods(testMethodNames, String.class, DefangingAnIpAddress.class);
         TestRunner testRunner = new TestRunner(tests, testMethods);
         testRunner.run(new DefangingAnIpAddress());
     }
