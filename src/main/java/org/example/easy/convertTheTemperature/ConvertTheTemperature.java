@@ -18,6 +18,9 @@ import java.util.List;
  * Note that:
  * Kelvin = Celsius + 273.15
  * Fahrenheit = Celsius * 1.80 + 32.00
+ * <p>
+ * Constraints:
+ * 0 <= celsius <= 1000
  */
 public class ConvertTheTemperature {
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
@@ -31,7 +34,20 @@ public class ConvertTheTemperature {
         testRunner.run(new ConvertTheTemperature());
     }
 
+    /**
+     * Runtime
+     * 0 ms
+     * Beats
+     * 100%
+     * Memory
+     * 40.9 MB
+     * Beats
+     * 75.84%
+     */
     protected double[] bruteForce(double celsius) {
-        return new double[]{309.65000, 97.70000};
+        return new double[]{
+                (celsius + 273.15),
+                ((celsius * 1.8) + 32)
+        };
     }
 }
