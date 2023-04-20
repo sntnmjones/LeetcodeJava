@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class TestRunner {
-//    private static Map<Class, Class> classMap = Map.of(String.class, (String));
+    private enum PrintType {
+        Input,
+        Output,
+        Result
+    }
 
     List<Test> tests;
     Method[] testMethods;
@@ -17,12 +21,6 @@ public class TestRunner {
     public TestRunner(List<Test> tests, Method[] testMethods) {
         this.tests = tests;
         this.testMethods = testMethods;
-    }
-
-    private static void printResults(String result, boolean didPass) {
-        System.out.println(String.format("Passed test: %s", didPass));
-        System.out.println("Test Result: " + result);
-        System.out.println("--------------------------------------------------------");
     }
 
     public void run(Object testClass) throws InvocationTargetException, IllegalAccessException {
@@ -33,8 +31,8 @@ public class TestRunner {
                 Method testMethod = testMethods[i];
                 testMethod.setAccessible(true);
                 System.out.println("Test Method: " + testMethod.getName());
-                System.out.println("Test Input: " + test.input);
-                System.out.println("Test Output: " + test.output);
+                printer(test.input, PrintType.Input);
+                printer(test.output, PrintType.Output);
 
                 long startTime = System.nanoTime();
                 Object result = test.output.getClass().cast(testMethod.invoke(testClass, test.input));
@@ -43,6 +41,23 @@ public class TestRunner {
                 compareObjects(result, test.output);
             }
         }
+    }
+
+    private void printer(Object object, PrintType printType) {
+        String objectStr = "";
+        if (object instanceof double[]) {
+            double[] casted = (double[]) object;
+            objectStr = Arrays.toString(casted);
+        } else {
+            objectStr = object.toString();
+        }
+        System.out.println(String.format("Test %s: %s", printType.name(), objectStr));
+    }
+
+    private void printResults(String result, boolean didPass) {
+        System.out.println(String.format("Passed test: %s", didPass));
+        printer(result, PrintType.Result);
+        System.out.println("--------------------------------------------------------");
     }
 
     private void compareObjects(Object result, Object testOutput) throws IllegalAccessException {
