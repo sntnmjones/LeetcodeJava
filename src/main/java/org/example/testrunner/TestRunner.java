@@ -9,12 +9,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class TestRunner {
-    private enum PrintType {
-        Input,
-        Output,
-        Result
-    }
-
     List<Test> tests;
     Method[] testMethods;
 
@@ -35,7 +29,12 @@ public class TestRunner {
                 printer(test.output, PrintType.Output);
 
                 long startTime = System.nanoTime();
-                Object result = test.output.getClass().cast(testMethod.invoke(testClass, test.input));
+                Object result = null;
+                if (test.target == null) {
+                    result = test.output.getClass().cast(testMethod.invoke(testClass, test.input));
+                } else {
+                    result = test.output.getClass().cast(testMethod.invoke(testClass, test.input, test.target));
+                }
                 System.out.println(String.format("Test Time: %d nano", System.nanoTime() - startTime));
 
                 compareObjects(result, test.output);
@@ -48,8 +47,15 @@ public class TestRunner {
         if (object instanceof double[]) {
             double[] casted = (double[]) object;
             objectStr = Arrays.toString(casted);
-        } else {
+        } else if (object instanceof int[]) {
+            int[] casted = (int[]) object;
+            objectStr = Arrays.toString(casted);
+        } else if (object instanceof String) {
             objectStr = object.toString();
+        } else if (object instanceof Integer) {
+            objectStr = String.valueOf((int) object);
+        } else {
+            System.out.println("printer: Object not supported");
         }
         System.out.println(String.format("Test %s: %s", printType.name(), objectStr));
     }
@@ -61,6 +67,10 @@ public class TestRunner {
     }
 
     private void compareObjects(Object result, Object testOutput) throws IllegalAccessException {
+        if (result == null) {
+            throw new RuntimeException("result is null");
+        }
+
         Class<?> clazz1 = result.getClass();
         Class<?> clazz2 = testOutput.getClass();
 
@@ -102,5 +112,11 @@ public class TestRunner {
         }
 
         return isSame;
+    }
+
+    private enum PrintType {
+        Input,
+        Output,
+        Result
     }
 }
