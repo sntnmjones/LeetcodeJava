@@ -78,16 +78,22 @@ public class TestRunner {
             printResults((String) result, false);
         }
 
+        boolean isSame = false;
         switch (clazz1.getTypeName()) {
             case "java.lang.String":
-                boolean isSame = Objects.equals(result, testOutput);
+                isSame = Objects.equals(result, testOutput);
                 printResults((String) result, isSame);
                 break;
             case "double[]":
-                compareArray(result, testOutput, double[].class);
+                isSame = compareArray(result, testOutput, double[].class);
+                printResults(Arrays.toString((double[]) result), isSame);
+                break;
+            case "int[]":
+                isSame = compareArray(result, testOutput, int[].class);
+                printResults(Arrays.toString((int[]) result), isSame);
                 break;
             default:
-                System.out.println("Class not handled for comparison");
+                System.out.println(String.format("Class not handled for comparison: [%s]", clazz1.getTypeName()));
         }
     }
 
