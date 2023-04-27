@@ -43,19 +43,27 @@ public class TestRunner {
     }
 
     private void printer(Object object, PrintType printType) {
+        Class<?> clazz = object.getClass();
         String objectStr = "";
-        if (object instanceof double[]) {
-            double[] casted = (double[]) object;
-            objectStr = Arrays.toString(casted);
-        } else if (object instanceof int[]) {
-            int[] casted = (int[]) object;
-            objectStr = Arrays.toString(casted);
-        } else if (object instanceof String) {
-            objectStr = object.toString();
-        } else if (object instanceof Integer) {
-            objectStr = String.valueOf((int) object);
-        } else {
-            System.out.println("printer: Object not supported");
+
+        switch (clazz.getTypeName()) {
+            case "double[]":
+                objectStr = Arrays.toString((double[]) object);
+                break;
+            case "int[]":
+                objectStr = Arrays.toString((int[]) object);
+                break;
+            case "java.lang.String[]":
+                objectStr = Arrays.toString((String[]) object);
+                break;
+            case "java.lang.String":
+                objectStr = object.toString();
+                break;
+            case "java.lang.Integer":
+                objectStr = String.valueOf((int) object);
+                break;
+            default:
+                System.out.println(String.format("printer: Object not supported: [%s]", clazz.getTypeName()));
         }
         System.out.println(String.format("Test %s: %s", printType.name(), objectStr));
     }
@@ -80,6 +88,10 @@ public class TestRunner {
 
         boolean isSame = false;
         switch (clazz1.getTypeName()) {
+            case "java.lang.Integer":
+                isSame = Objects.equals(result, testOutput);
+                printResults(String.valueOf(result), isSame);
+                break;
             case "java.lang.String":
                 isSame = Objects.equals(result, testOutput);
                 printResults((String) result, isSame);
