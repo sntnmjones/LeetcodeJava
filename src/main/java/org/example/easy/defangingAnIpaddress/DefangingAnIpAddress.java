@@ -35,8 +35,8 @@ public class DefangingAnIpAddress {
     /**
      * replaceAll will iterate through the string and replace every occurrence of '.' with '[.]'
      * <p>
-     * Runtime: O()
-     * Space Complexity: O()
+     * Runtime: O(n)
+     * Space Complexity: O(n)
      * <p>
      * Runtime
      * 2 ms
@@ -54,8 +54,8 @@ public class DefangingAnIpAddress {
     /**
      * Using StringBuilder to manually iterate through string and replace each occurrence
      * <p>
-     * Runtime: O()
-     * Space Complexity: O()
+     * Runtime: O(n)
+     * Space Complexity: O(n)
      * <p>
      * Runtime
      * 0 ms
