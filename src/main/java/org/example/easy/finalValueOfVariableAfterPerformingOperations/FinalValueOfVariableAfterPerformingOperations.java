@@ -1,7 +1,5 @@
 package org.example.easy.finalValueOfVariableAfterPerformingOperations;
 
-import org.example.easy.BuildArrayFromPermutation;
-import org.example.easy.defangingAnIpaddress.DefangingAnIpAddress;
 import org.example.testrunner.Test;
 import org.example.testrunner.TestRunner;
 import org.example.testrunner.TestRunnerUtil;
@@ -28,7 +26,9 @@ import java.util.List;
 public class FinalValueOfVariableAfterPerformingOperations {
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         List<Test> tests = Arrays.asList(
-                new Test(new String[]{"--X","X++","X++"}, 1)
+                new Test(new String[]{"--X", "X++", "X++"}, 1),
+                new Test(new String[]{"++X", "++X", "X++"}, 3),
+                new Test(new String[]{"X++", "++X", "--X", "X--"}, 0)
         );
 
         List<String> testMethodNames = Arrays.asList("bruteForce");
@@ -37,7 +37,35 @@ public class FinalValueOfVariableAfterPerformingOperations {
         testRunner.run(new FinalValueOfVariableAfterPerformingOperations());
     }
 
+    /**
+     * Runtime: O(n)
+     * Space Complexity: O(1)
+     * <p>
+     * Runtime
+     * 1 ms
+     * Beats
+     * 78.62%
+     * Memory
+     * 42.7 MB
+     * Beats
+     * 9.67%
+     */
     protected int bruteForce(String[] operations) {
-        return 1;
+        int X = 0;
+
+        for (int i = 0; i < operations.length; i++) {
+            switch (operations[i]) {
+                case "X--":
+                case "--X":
+                    X--;
+                    break;
+                case "X++":
+                case "++X":
+                    X++;
+                    break;
+            }
+        }
+
+        return X;
     }
 }
