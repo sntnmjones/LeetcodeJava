@@ -35,7 +35,7 @@ public class NumberOfGoodPairs {
 
     /**
      * Runtime: O(n^2)
-     * Space Complexity: O()
+     * Space Complexity: O(1)
      * <p>
      * Runtime
      * 1 ms
